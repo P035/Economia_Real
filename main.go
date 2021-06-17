@@ -101,6 +101,6 @@ func main() {
 		fmt.Println("Error reading password:", err)
 	}
 	db.Init()
-	db.Select([]byte("SELECT * FROM usuarios WHERE Nombre = 'peo' AND Contraseña = 'Culo'"))
+	db.Select([]byte("SELECT * FROM usuarios WHERE Nombre = '" + string(user[:len(user) - 1]) + "' AND Contraseña = '" + string(psw[:len(user) - 1]) + "'"))
 	fmt.Println(string(user) + string(psw))
 }

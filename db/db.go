@@ -34,7 +34,10 @@ func Init() {
 // I'm going to try doing a select query without a transaction
 func Select(query []byte) []usuario{
 
-	fmt.Println(len(query))
+	for _, i := range query {
+
+		fmt.Println(i)
+	}
 	data, err := db.Query(string(query))
 	if err != nil{
 
