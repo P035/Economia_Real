@@ -36,7 +36,7 @@ func Select(query []byte) []usuario{
 
 	for _, i := range query {
 
-		fmt.Println(i)
+		fmt.Println(string(i))
 	}
 	data, err := db.Query(string(query))
 	if err != nil{
