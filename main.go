@@ -102,5 +102,4 @@ func main() {
 	}
 	db.Init()
 	db.Select("SELECT * FROM usuarios WHERE Nombre = '" + string(user[:len(user) - 1]) + "' AND Contraseña = '" + string(psw[:len(psw) - 1]) + "';")
-	fmt.Println(psw, user)
 }

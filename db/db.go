@@ -34,7 +34,7 @@ func Init() {
 // I'm going to try doing a select query without a transaction
 func Select(query string) []usuario{
 
-	fmt.Println("Executing query:", query)
+	fmt.Println(query)
 	data, err := db.Query(query)
 	if err != nil{
 
