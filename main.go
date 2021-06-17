@@ -6,10 +6,11 @@ import (
 	"net"
 	"os"
 	"bufio"
+	"github.com/P035/Economia_Real/db"
 )
 
 // This two constants will be the data that I'll pass to the TCPAddr struct.
-const ip = "192.168.1.16"
+const ip = "192.168.1.8"
 const port = 3000
 
 func main() {
@@ -70,4 +71,36 @@ func main() {
 	}
 	<CODE>
 	*/
+	// Accept connection and check for errors
+	conn, err := listener.Accept()
+	if err != nil {
+
+		fmt.Println("Error accepting connecton:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Connection created with", conn.RemoteAddr())
+	defer conn.Close()
+
+	// It will read the user and the password from the client so it needs to create a reader
+	reader := bufio.NewReader(conn)
+
+	// It has to send two messages to the client, so here it creates the two string messages, but in bytes.
+	user_msg := []byte("Enter your username: ")
+	psw_msg := []byte("Enter your password: ")
+	conn.Write(user_msg)
+	user, err := reader.ReadBytes('\n')
+	if err != nil {
+
+		fmt.Println("Error reading user name:", err)
+		os.Exit(1)
+	}
+	conn.Write(psw_msg)
+	psw, err := reader.ReadBytes('\n')
+	if err != nil {
+
+		fmt.Println("Error reading password:", err)
+	}
+	db.Init()
+	db.Select("SELECT * FROM usuarios WHERE Nombre = '" + string(user[:len(user) - 1]) + "' AND Contraseña = '" + string(psw[:len(psw) - 1]) + "';")
+	fmt.Println(psw, user)
 }
