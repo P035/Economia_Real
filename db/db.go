@@ -32,10 +32,10 @@ func Init() {
 }
 
 // I'm going to try doing a select query without a transaction
-func Select(query string) []usuario{
+func Select(query []byte) []usuario{
 
-	fmt.Println(query)
-	data, err := db.Query(query)
+	fmt.Println(len(query))
+	data, err := db.Query(string(query))
 	if err != nil{
 
 		fmt.Println("Error reading from database:", err)
