@@ -6,14 +6,20 @@ import (
 	"net"
 	"os"
 	"bufio"
+	"strconv"
 	"github.com/P035/Economia_Real/db"
 )
 
-// This two constants will be the data that I'll pass to the TCPAddr struct.
-const ip = "192.168.1.8"
-const port = 3000
-
 func main() {
+
+	// Read from the terminal arguments.
+	if len(os.Args) < 3 {
+
+		fmt.Println("Fogot to specify ip and port. (ip first then port)")
+		os.Exit(1)
+	}
+	ip := os.Args[1]
+	port, _ := strconv.Atoi(os.Args[2])
 
 	// Declare the addr struct and define the IP and port fields.
 	var addr net.TCPAddr
