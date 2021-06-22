@@ -2,7 +2,6 @@ package db
 
 import (
 
-	"os"
 	"fmt"
 	"database/sql"
 	_"github.com/go-sql-driver/mysql"
@@ -25,7 +24,6 @@ func Init() {
 	if err != nil {
 
 		fmt.Println("Error establishing connection with database", err)
-		os.Exit(1)
 	}
 	db = conn
 	fmt.Println("Connection created with database")
@@ -42,7 +40,6 @@ func Select(query []byte) []usuario{
 	if err != nil{
 
 		fmt.Println("Error reading from database:", err)
-		os.Exit(1)
 	}
 	var aux bool
 	var arr[]usuario
@@ -71,7 +68,6 @@ func Insert(query string) {
 	if err != nil {
 
 		fmt.Println("Error executing query", err)
-		os.Exit(1)
 	}
 	fmt.Println("Query executed successfully")
 	id, _ := result.LastInsertId()

@@ -40,4 +40,12 @@ func main() {
 	// If there isn't errors it defers the close function of the listener.
 	fmt.Println("Listener created")
 	defer listener.Close()
+
+	// After creating the listener it has to accept connections and create a gorroutine for each
+	for {
+
+		// Wait and accept connections
+		conn, err := listener.Accept()
+		
+	}
 }
