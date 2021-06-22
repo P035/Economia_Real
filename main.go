@@ -7,7 +7,7 @@ import (
 	"os"
 	"bufio"
 	"strconv"
-	_"github.com/P035/Economia_Real/db"
+	"github.com/P035/Economia_Real/cmd"
 )
 
 func handle(conn net.Conn) {
@@ -32,7 +32,8 @@ func handle(conn net.Conn) {
 			}
 		}else {
 
-			
+			fmt.Println(string(data))
+			cmd.Login(conn)
 		}
 	}
 }
