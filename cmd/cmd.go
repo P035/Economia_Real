@@ -4,10 +4,10 @@ package cmd
 import (
 
 	"net"
-	"github.com/P035/Economia_Real/db"
+	"fmt"
 )
 
-func login(conn net.Conn) {
+func Login(conn net.Conn) {
 
 	usr_msg := []byte("Enter your username: ")
 	_, err := conn.Write(usr_msg)
@@ -17,5 +17,10 @@ func login(conn net.Conn) {
 		return
 	}
 	psw_msg := []byte("Enter your password: ")
-	_, err := conn.Write(psw_msg)
+	_, err = conn.Write(psw_msg)
+	if err != nil {
+
+		fmt.Println("Error sending message to client")
+		return
+	}
 }
