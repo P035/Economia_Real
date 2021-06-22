@@ -7,8 +7,35 @@ import (
 	"os"
 	"bufio"
 	"strconv"
-	"github.com/P035/Economia_Real/db"
+	_"github.com/P035/Economia_Real/db"
 )
+
+func handle(conn net.Conn) {
+
+	// It will use a bufio reader to read from the client.
+	rdr := bufio.NewReader(conn)
+
+	for {
+
+		data, err := rdr.ReadBytes('\n')
+		if err != nil {
+
+			// Check if there is an EOF error
+			if err.Error() == "EOF"{
+
+				fmt.Println("Connection closed with client")
+				conn.Close()
+				break
+			}else {
+
+				fmt.Println("Error reading from client:", err)
+			}
+		}else {
+
+			
+		}
+	}
+}
 
 func main() {
 
@@ -46,6 +73,15 @@ func main() {
 
 		// Wait and accept connections
 		conn, err := listener.Accept()
-		
+		// Check for errors
+		if err != nil {
+
+			fmt.Println("Error accepting connection:", err)
+			continue
+		}
+		fmt.Println("Connection created with:", conn.RemoteAddr())
+
+		// It creates the corroutine to handle the connection
+		go handle(conn)
 	}
 }
