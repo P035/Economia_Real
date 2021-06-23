@@ -30,16 +30,13 @@ func Init() {
 }
 
 // I'm going to try doing a select query without a transaction
-func Select(query []byte) []usuario{
+func Select(query string) []usuario{
 
-	for _, i := range query {
-
-		fmt.Println(string(i))
-	}
-	data, err := db.Query(string(query))
+	data, err := db.Query(query)
 	if err != nil{
 
 		fmt.Println("Error reading from database:", err)
+		return nil
 	}
 	var aux bool
 	var arr[]usuario
@@ -49,13 +46,11 @@ func Select(query []byte) []usuario{
 		aux = data.Next()
 		if aux == false {
 
-			fmt.Println(arr)
 			return arr
 		}else {
 
 			data.Scan(&user.id, &user.name, &user.psw)
 			arr = append(arr, user)
-			fmt.Println(arr)
 		}
 	}
 }
