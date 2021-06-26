@@ -10,7 +10,7 @@ import (
 )
 
 // This function will read from the client the username and the password and then search for those credentials inthe db
-func Login(conn net.Conn) {
+func Login(conn net.Conn) []db.Usuario{
 
 	// Initialize the database
 	db.Init()
@@ -24,7 +24,7 @@ func Login(conn net.Conn) {
 	if err != nil {
 
 		fmt.Println("Error sending message to client:", err)
-		return
+		return nil
 	}
 
 	// If there is no errors it will read the username
@@ -32,7 +32,7 @@ func Login(conn net.Conn) {
 	if err != nil {
 
 		fmt.Println("Error reading from client:", err)
-		return
+		return nil
 	}
 	fmt.Println("User:", string(usr))
 
@@ -41,17 +41,18 @@ func Login(conn net.Conn) {
 	if err != nil {
 
 		fmt.Println("Error sending message to client:", err)
-		return
+		return nil
 	}
 	// If there is no errors it will read the password
 	psw, err := rdr.ReadBytes('\n')
 	if err != nil {
 
 		fmt.Println("Error reading from client:", err)
+		return nil
 	}
 
 	// If it successfully read the data from the client it is going to see if there is an user with that password in the database
 	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "' AND Contraseña = '" + string(psw[:len(psw) - 2]) + "';"
 	data := db.Select(query)
-	fmt.Println(data)
+	return data
 }

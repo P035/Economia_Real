@@ -33,7 +33,13 @@ func handle(conn net.Conn) {
 		}else {
 
 			fmt.Println(string(data))
-			cmd.Login(conn)
+			data = cmd.Login(conn)
+			if len(data) == 0{
+
+				conn.Write([]byte("Username or password incorrect."))
+				conn.Close()
+				break
+			}
 		}
 	}
 }

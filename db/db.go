@@ -7,7 +7,7 @@ import (
 	_"github.com/go-sql-driver/mysql"
 )
 
-type usuario struct {
+type Usuario struct {
 
 	id int
 	name string
@@ -30,7 +30,7 @@ func Init() {
 }
 
 // I'm going to try doing a select query without a transaction
-func Select(query string) []usuario{
+func Select(query string) []Usuario{
 
 	data, err := db.Query(query)
 	if err != nil{
@@ -39,8 +39,8 @@ func Select(query string) []usuario{
 		return nil
 	}
 	var aux bool
-	var arr[]usuario
-	var user usuario
+	var arr[]Usuario
+	var user Usuario
 	for {
 
 		aux = data.Next()
