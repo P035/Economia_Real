@@ -33,8 +33,8 @@ func handle(conn net.Conn) {
 		}else {
 
 			fmt.Println(string(data))
-			data = cmd.Login(conn)
-			if len(data) == 0{
+			db_data := cmd.Login(conn)
+			if len(db_data) == 0{
 
 				conn.Write([]byte("Username or password incorrect."))
 				conn.Close()

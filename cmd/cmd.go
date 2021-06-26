@@ -50,6 +50,7 @@ func Login(conn net.Conn) []db.Usuario{
 		fmt.Println("Error reading from client:", err)
 		return nil
 	}
+	fmt.Println("Password:", string(psw))
 
 	// If it successfully read the data from the client it is going to see if there is an user with that password in the database
 	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "' AND Contraseña = '" + string(psw[:len(psw) - 2]) + "';"
