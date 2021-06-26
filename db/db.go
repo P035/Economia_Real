@@ -57,14 +57,17 @@ func Select(query string) []Usuario{
 
 // The insert query with the database/sql library works if you do it
 // directly with the database (without a transaction).
-func Insert(query string) {
+// The return value will deppend if the query succseed or not.
+func Insert(query string) bool{
 
 	result, err := db.Exec(query)
 	if err != nil {
 
 		fmt.Println("Error executing query", err)
+		return false
 	}
 	fmt.Println("Query executed successfully")
 	id, _ := result.LastInsertId()
 	fmt.Println("Last insert id:", id)
+	return true
 }
