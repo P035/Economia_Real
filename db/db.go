@@ -9,9 +9,9 @@ import (
 
 type Usuario struct {
 
-	id int
-	name string
-	psw string
+	Id int
+	Name string
+	Psw string
 }
 
 var db *sql.DB = nil
@@ -49,7 +49,7 @@ func Select(query string) []Usuario{
 			return arr
 		}else {
 
-			data.Scan(&user.id, &user.name, &user.psw)
+			data.Scan(&user.Id, &user.Name, &user.Psw)
 			arr = append(arr, user)
 		}
 	}

@@ -23,7 +23,7 @@ func handle(conn net.Conn) {
 			// Check if there is an EOF error
 			if err.Error() == "EOF"{
 
-				fmt.Println("Connection closed with client")
+				fmt.Println("Connection closed with:", conn.RemoteAddr())
 				conn.Close()
 				break
 			}else {
@@ -32,13 +32,35 @@ func handle(conn net.Conn) {
 			}
 		}else {
 
-			fmt.Println(string(data))
-			db_data := cmd.Login(conn)
-			if len(db_data) == 0{
 
-				conn.Write([]byte("Username or password incorrect."))
-				conn.Close()
-				break
+			fmt.Println(string(data[:len(data) - 2]))
+			if string(data[:len(data) - 2]) == "+login"{
+
+				fmt.Println(string(data))
+				db_data := cmd.Login(conn)
+				if len(db_data) == 0{
+
+					conn.Write([]byte("Username or password incorrect.\n"))
+					fmt.Println("Connection closed with:", conn.RemoteAddr())
+					conn.Close()
+					break
+				}else {
+
+					conn.Write([]byte("Welcome " + db_data[0].Name + "\n"))
+				}
+			}else if string(data[:len(data) - 2]) == "+register"{
+
+				succeed := cmd.Register(conn)
+				if succeed == false {
+
+					conn.Write([]byte("Error registering your account :C\n"))
+					fmt.Println("Connection closed with:", conn.RemoteAddr())
+					conn.Close()
+					break
+				}else {
+
+					conn.Write([]byte("You are now succesfully registered and loged in with your nnew account.\n"))
+				}
 			}
 		}
 	}

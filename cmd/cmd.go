@@ -38,7 +38,7 @@ func Register(conn net.Conn) bool {
 		fmt.Println("Error reading from the client:", err)
 		return false
 	}
-	fmt.Println("Username:", string(usr))
+	fmt.Println("Username:", string(usr[:len(usr) - 1]))
 
 	// Now is going to read the password.
 	_, err = conn.Write(psw_msg)
@@ -54,7 +54,7 @@ func Register(conn net.Conn) bool {
 		fmt.Println("Error reading from the client:", err)
 		return false
 	}
-	fmt.Println("Password:", string(psw))
+	fmt.Println("Password:", string(psw[:len(psw) - 1]))
 
 	// The query is going to be an insert query.
 	query := "INSERT INTO usuarios(Nombre, Contraseña) VALUES('" + string(usr[:len(usr) - 2]) + "', '" + string(psw[:len(psw) - 2])  + "');"
@@ -86,7 +86,7 @@ func Login(conn net.Conn) []db.Usuario{
 		fmt.Println("Error reading from client:", err)
 		return nil
 	}
-	fmt.Println("User:", string(usr))
+	fmt.Println("User:", string(usr[:len(usr) - 1]))
 
 	_, err = conn.Write(psw_msg)
 	if err != nil {
@@ -101,7 +101,7 @@ func Login(conn net.Conn) []db.Usuario{
 		fmt.Println("Error reading from client:", err)
 		return nil
 	}
-	fmt.Println("Password:", string(psw))
+	fmt.Println("Password:", string(psw[:len(psw) - 1]))
 
 	// If it successfully read the data from the client it is going to see if there is an user with that password in the database
 	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "' AND Contraseña = '" + string(psw[:len(psw) - 2]) + "';"
