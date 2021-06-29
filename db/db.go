@@ -13,6 +13,8 @@ type Usuario struct {
 	Id int
 	Name string
 	Psw string
+	Cash int
+	Money int
 }
 
 var db *sql.DB = nil
@@ -20,7 +22,7 @@ var db *sql.DB = nil
 // This function will connect to the database, so it is like an initializer.
 func Init() {
 	// First it has to connect to my "server", that is actually just localhost.
-	conn, err := sql.Open("mysql", "root:Naranjo7854@/relacional")
+	conn, err := sql.Open("mysql", "root:Naranjo7854@/Economia")
 	// Check for errors
 	if err != nil {
 
@@ -51,7 +53,7 @@ func Select(query string) []Usuario{
 			return arr
 		}else {
 
-			data.Scan(&user.Id, &user.Name, &user.Psw)
+			data.Scan(&user.Id, &user.Name, &user.Psw, &user.Cash, &user.Money)
 			arr = append(arr, user)
 		}
 	}
@@ -71,6 +73,6 @@ func Insert(query string) []Usuario{
 	fmt.Println("Query executed successfully")
 	id, _ := result.LastInsertId()
 	fmt.Println("Last insert id:", strconv.FormatInt(id, 10))
-	query = "SELECT * FROM usuarios WHERE id = '" + strconv.FormatInt(id, 10) + "';"
+	query = "SELECT * FROM users WHERE id = '" + strconv.FormatInt(id, 10) + "';"
 	return Select(query)
 }

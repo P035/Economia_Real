@@ -88,7 +88,7 @@ func handle(conn net.Conn) {
 
 					logged_in = false
 					usr = nil
-					conn.Write([]byte("You are logged out!"))
+					conn.Write([]byte("You are logged out!\n"))
 				}
 			}
 		}

@@ -57,7 +57,7 @@ func Register(conn net.Conn) []db.Usuario {
 	fmt.Println("Password:", string(psw[:len(psw) - 1]))
 
 	// After reading all the data from the client it has to check if it exists in the database.
-	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "';"
+	query := "SELECT * FROM users WHERE Username = '" + string(usr[:len(usr) - 2]) + "';"
 	data := db.Select(query)
 	if len(data) > 0 {
 
@@ -66,7 +66,7 @@ func Register(conn net.Conn) []db.Usuario {
 	}
 
 	// The query is going to be an insert query.
-	query = "INSERT INTO usuarios(Nombre, Contraseña) VALUES('" + string(usr[:len(usr) - 2]) + "', '" + string(psw[:len(psw) - 2])  + "');"
+	query = "INSERT INTO users(Username, Psw) VALUES('" + string(usr[:len(usr) - 2]) + "', '" + string(psw[:len(psw) - 2])  + "');"
 	result := db.Insert(query)
 	fmt.Println("Result:", result)
 	return result
@@ -114,7 +114,7 @@ func Login(conn net.Conn) []db.Usuario{
 	fmt.Println("Password:", string(psw[:len(psw) - 1]))
 
 	// If it successfully read the data from the client it is going to see if there is an user with that password in the database
-	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "' AND Contraseña = '" + string(psw[:len(psw) - 2]) + "';"
+	query := "SELECT * FROM users WHERE Username = '" + string(usr[:len(usr) - 2]) + "' AND Psw = '" + string(psw[:len(psw) - 2]) + "';"
 	data := db.Select(query)
 	return data
 }
