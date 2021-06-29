@@ -3,6 +3,7 @@ package db
 import (
 
 	"fmt"
+	"strconv"
 	"database/sql"
 	_"github.com/go-sql-driver/mysql"
 )
@@ -32,6 +33,7 @@ func Init() {
 // I'm going to try doing a select query without a transaction
 func Select(query string) []Usuario{
 
+	fmt.Println("Executing query:", query)
 	data, err := db.Query(query)
 	if err != nil{
 
@@ -58,16 +60,17 @@ func Select(query string) []Usuario{
 // The insert query with the database/sql library works if you do it
 // directly with the database (without a transaction).
 // The return value will deppend if the query succseed or not.
-func Insert(query string) bool{
+func Insert(query string) []Usuario{
 
 	result, err := db.Exec(query)
 	if err != nil {
 
 		fmt.Println("Error executing query", err)
-		return false
+		return nil
 	}
 	fmt.Println("Query executed successfully")
 	id, _ := result.LastInsertId()
-	fmt.Println("Last insert id:", id)
-	return true
+	fmt.Println("Last insert id:", strconv.FormatInt(id, 10))
+	query = "SELECT * FROM usuarios WHERE id = '" + strconv.FormatInt(id, 10) + "';"
+	return Select(query)
 }

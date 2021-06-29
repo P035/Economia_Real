@@ -8,9 +8,13 @@ import (
 	"bufio"
 	"strconv"
 	"github.com/P035/Economia_Real/cmd"
+	"github.com/P035/Economia_Real/db"
 )
 
 func handle(conn net.Conn) {
+
+	var logged_in bool = false
+	var usr []db.Usuario
 
 	// It will use a bufio reader to read from the client.
 	rdr := bufio.NewReader(conn)
@@ -33,33 +37,47 @@ func handle(conn net.Conn) {
 		}else {
 
 
-			fmt.Println(string(data[:len(data) - 2]))
+			fmt.Println(conn.RemoteAddr(), ":", string(data[:len(data) - 2]))
 			if string(data[:len(data) - 2]) == "+login"{
 
-				fmt.Println(string(data))
-				db_data := cmd.Login(conn)
-				if len(db_data) == 0{
+				if logged_in == false {
 
-					conn.Write([]byte("Username or password incorrect.\n"))
-					fmt.Println("Connection closed with:", conn.RemoteAddr())
-					conn.Close()
-					break
+
+					fmt.Println(string(data))
+					db_data := cmd.Login(conn)
+					if len(db_data) == 0{
+
+						conn.Write([]byte("Username or password incorrect.\n"))
+					}else {
+
+						conn.Write([]byte("Welcome " + db_data[0].Name + "\n"))
+						logged_in = true
+						usr = db_data
+						fmt.Println(conn.RemoteAddr(), "=", usr)
+					}
 				}else {
 
-					conn.Write([]byte("Welcome " + db_data[0].Name + "\n"))
+					conn.Write([]byte("You are allready logged in. Logout first!\n"))
 				}
 			}else if string(data[:len(data) - 2]) == "+register"{
 
-				succeed := cmd.Register(conn)
-				if succeed == false {
+				if logged_in == false{
 
-					conn.Write([]byte("Error registering your account :C\n"))
-					fmt.Println("Connection closed with:", conn.RemoteAddr())
-					conn.Close()
-					break
+					db_data := cmd.Register(conn)
+					if db_data == nil {
+
+						conn.Write([]byte("Error registering your account :C\n"))
+						fmt.Println(db_data)
+					}else {
+
+						conn.Write([]byte("You are now succesfully registered and logged in with your new account.\n"))
+						logged_in = true
+						usr = db_data
+						fmt.Println(conn.RemoteAddr(), "=", usr)
+					}
 				}else {
 
-					conn.Write([]byte("You are now succesfully registered and loged in with your nnew account.\n"))
+					conn.Write([]byte("You are allready logged in. Logout first!\n"))
 				}
 			}
 		}

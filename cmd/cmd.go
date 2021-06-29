@@ -14,7 +14,7 @@ var psw_msg []byte = []byte("Enter your password: ")
 
 // This function will read from the client the username and the password. And after that it's going to register the data into the database
 // The return value will mean if the function succeeded.
-func Register(conn net.Conn) bool {
+func Register(conn net.Conn) []db.Usuario {
 
 	// Initialize the database
 	db.Init()
@@ -30,13 +30,13 @@ func Register(conn net.Conn) bool {
 	if err != nil {
 
 		fmt.Println("Error sending message to the client:", err)
-		return false
+		return nil
 	}
 	usr, err := rdr.ReadBytes('\n')
 	if err != nil {
 
 		fmt.Println("Error reading from the client:", err)
-		return false
+		return nil
 	}
 	fmt.Println("Username:", string(usr[:len(usr) - 1]))
 
@@ -46,19 +46,29 @@ func Register(conn net.Conn) bool {
 	if err != nil {
 
 		fmt.Println("Error sending message to the client:", err)
-		return false
+		return nil
 	}
 	psw, err := rdr.ReadBytes('\n')
 	if err != nil {
 
 		fmt.Println("Error reading from the client:", err)
-		return false
+		return nil
 	}
 	fmt.Println("Password:", string(psw[:len(psw) - 1]))
 
+	// After reading all the data from the client it has to check if it exists in the database.
+	query := "SELECT * FROM usuarios WHERE Nombre = '" + string(usr[:len(usr) - 2]) + "';"
+	data := db.Select(query)
+	if len(data) > 0 {
+
+		conn.Write([]byte("Error: The username allready exists!\n"))
+		return nil
+	}
+
 	// The query is going to be an insert query.
-	query := "INSERT INTO usuarios(Nombre, Contraseña) VALUES('" + string(usr[:len(usr) - 2]) + "', '" + string(psw[:len(psw) - 2])  + "');"
+	query = "INSERT INTO usuarios(Nombre, Contraseña) VALUES('" + string(usr[:len(usr) - 2]) + "', '" + string(psw[:len(psw) - 2])  + "');"
 	result := db.Insert(query)
+	fmt.Println("Result:", result)
 	return result
 }
 
