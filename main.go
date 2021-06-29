@@ -79,6 +79,17 @@ func handle(conn net.Conn) {
 
 					conn.Write([]byte("You are allready logged in. Logout first!\n"))
 				}
+			}else if string(data[:len(data) - 2]) == "+logout"{
+
+				if logged_in == false {
+
+					conn.Write([]byte("You are allready logged out. Loggin first! \n"))
+				}else {
+
+					logged_in = false
+					usr = nil
+					conn.Write([]byte("You are logged out!"))
+				}
 			}
 		}
 	}
